@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging Stations</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .hidden { display: none; }
+        .page {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+        #loginPage { background-image: url('login-bg.jpg'); }
+        #homePage { background-image: url('home-bg.jpg'); }
+        #stationsPage { background-image: url('stations-bg.jpg'); }
+        #registerPage { background-image: url('register-bg.jpg'); }
+        
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        input {
+            width: 90%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #ddd;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginPage" class="page">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Enter your username">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="homePage" class="page hidden">
+        <h1>Find Nearby EV Charging Stations</h1>
+        <button onclick="showStationsPage()">View Stations</button>
+    </div>
+
+    <div id="stationsPage" class="page hidden">
+        <h1>Nearby Charging Stations</h1>
+        <ul id="stationsList"></ul>
+        <button onclick="showHomePage()">Back</button>
+    </div>
+
+    <div id="registerPage" class="page hidden">
+        <h1 id="stationName"></h1>
+        <p id="stationPrice"></p>
+        <input type="text" id="vehicleName" placeholder="Enter your vehicle name">
+        <button onclick="register()">Register</button>
+    </div>
+
+    <script>
+        let stations = [
+            { id: 1, name: "FastCharge Station", price: 0.30 },
+            { id: 2, name: "EcoCharge Hub", price: 0.25 },
+            { id: 3, name: "SuperCharge Plaza", price: 0.40 }
+        ];
+
+        function login() {
+            let username = document.getElementById("username").value;
+            if (username) {
+                document.getElementById("loginPage").classList.add("hidden");
+                document.getElementById("homePage").classList.remove("hidden");
+            }
+        }
+
+        function showHomePage() {
+            document.getElementById("stationsPage").classList.add("hidden");
+            document.getElementById("homePage").classList.remove("hidden");
+        }
+
+        function showStationsPage() {
+            document.getElementById("homePage").classList.add("hidden");
+            document.getElementById("stationsPage").classList.remove("hidden");
+            let stationsList = document.getElementById("stationsList");
+            stationsList.innerHTML = "";
+            stations.forEach(station => {
+                let li = document.createElement("li");
+                li.innerHTML = `${station.name} - $${station.price}/kWh <button onclick="showRegisterPage(${station.id})">Register</button>`;
+                stationsList.appendChild(li);
+            });
+        }
+
+        function showRegisterPage(id) {
+            let station = stations.find(s => s.id === id);
+            document.getElementById("stationsPage").classList.add("hidden");
+            document.getElementById("registerPage").classList.remove("hidden");
+            document.getElementById("stationName").innerText = `Register for ${station.name}`;
+            document.getElementById("stationPrice").innerText = `Price: $${station.price}/kWh`;
+        }
+
+        function register() {
+            let vehicleName = document.getElementById("vehicleName").value;
+            if (vehicleName) {
+                alert("Registered successfully!");
+                document.getElementById("registerPage").classList.add("hidden");
+                document.getElementById("stationsPage").classList.remove("hidden");
+            }
+        }
+    </script>
+</body>
+</html>
